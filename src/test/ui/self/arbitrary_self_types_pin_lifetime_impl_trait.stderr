@@ -1,0 +1,16 @@
+error: cannot infer an appropriate lifetime
+  --> $DIR/arbitrary_self_types_pin_lifetime_impl_trait.rs:6:44
+   |
+LL |     fn f(self: Pin<&Self>) -> impl Clone { self }
+   |                ----------     ----------   ^^^^ ...and is captured here
+   |                |              |
+   |                |              ...is required to be `'static` by this...
+   |                data with this lifetime...
+   |
+help: to permit non-static references in an `impl Trait` value, you can add an explicit bound for the anonymous lifetime #1 defined on the method body at 6:5
+   |
+LL |     fn f(self: Pin<&Self>) -> impl Clone + '_ { self }
+   |                                          ^^^^
+
+error: aborting due to previous error
+

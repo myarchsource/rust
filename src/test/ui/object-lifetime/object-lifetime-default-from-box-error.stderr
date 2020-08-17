@@ -1,0 +1,26 @@
+error: cannot infer an appropriate lifetime
+  --> $DIR/object-lifetime-default-from-box-error.rs:18:5
+   |
+LL | fn load(ss: &mut SomeStruct) -> Box<dyn SomeTrait> {
+   |             --------------- data with this lifetime...
+...
+LL |     ss.r
+   |     ^^^^ ...is captured and required to be `'static` here
+   |
+help: to permit non-static references in a `dyn Trait` value, you can add an explicit bound for the anonymous lifetime #2 defined on the function body at 14:1
+   |
+LL | fn load(ss: &mut SomeStruct) -> Box<dyn SomeTrait + '_> {
+   |                                                   ^^^^
+
+error[E0621]: explicit lifetime required in the type of `ss`
+  --> $DIR/object-lifetime-default-from-box-error.rs:31:12
+   |
+LL | fn store1<'b>(ss: &mut SomeStruct, b: Box<dyn SomeTrait+'b>) {
+   |                   --------------- help: add explicit lifetime `'b` to the type of `ss`: `&mut SomeStruct<'b>`
+...
+LL |     ss.r = b;
+   |            ^ lifetime `'b` required
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0621`.
